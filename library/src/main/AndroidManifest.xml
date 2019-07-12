@@ -1,2 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cn.quickits.hybrid" />
+    package="cn.quickits.hybrid">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application>
+
+        <activity android:name=".ui.HybridActivity" />
+
+    </application>
+
+</manifest>
