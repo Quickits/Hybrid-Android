@@ -33,6 +33,14 @@ open class HybridActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        if (web_view.canGoBack()) {
+            web_view.goBack()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     companion object {
 
         private const val PARAM_PATH = "param_path"
