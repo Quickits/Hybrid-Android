@@ -1,8 +1,7 @@
 package cn.quickits.hybrid.sample
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import cn.quickits.hybrid.ui.HybridActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -13,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         btn.setOnClickListener {
-            startActivity(Intent(this, HybridActivity::class.java))
+            HybridActivity.launch(this, "http://192.168.100.115:8082")
         }
     }
 }

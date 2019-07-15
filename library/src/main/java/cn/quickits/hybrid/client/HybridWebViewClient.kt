@@ -1,8 +1,10 @@
 package cn.quickits.hybrid.client
 
 import android.graphics.Bitmap
+import android.net.Uri
 import android.net.http.SslError
 import android.webkit.*
+import cn.quickits.hybrid.Hybrid
 import cn.quickits.hybrid.util.Logger
 
 
@@ -12,16 +14,12 @@ import cn.quickits.hybrid.util.Logger
  * @author: gavinliu
  * @create: 2019-07-12 10:48
  **/
-class HybridWebViewClient : WebViewClient() {
-
-    override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-        Logger.d("shouldOverrideUrlLoading: $url")
-        return super.shouldOverrideUrlLoading(view, url)
-    }
+class HybridWebViewClient(val hybrid: Hybrid) : WebViewClient() {
 
     override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-        Logger.d("shouldOverrideUrlLoading: ${request?.url}")
-        return super.shouldOverrideUrlLoading(view, request)
+        val url: Uri = request?.url ?: return super.shouldOverrideUrlLoading(view, request)
+
+        return hybrid.handleUrl(url) || super.shouldOverrideUrlLoading(view, request)
     }
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {

@@ -1,5 +1,7 @@
 package cn.quickits.hybrid.ui
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import cn.quickits.hybrid.Hybrid
@@ -21,9 +23,24 @@ class HybridActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hybrid)
         hybrid = Hybrid(this, web_view)
-
         hybrid.setupWebView()
-        web_view.loadUrl("http://baidu.com")
+
+        intent?.getStringExtra(PARAM_PATH)?.let {
+            web_view.loadUrl(it)
+        }
+
+    }
+
+    companion object {
+
+        private const val PARAM_PATH = "param_path"
+
+        fun launch(context: Context, path: String) {
+            context.startActivity(Intent(context, HybridActivity::class.java).apply {
+                putExtra(PARAM_PATH, path)
+            })
+        }
+
     }
 
 }

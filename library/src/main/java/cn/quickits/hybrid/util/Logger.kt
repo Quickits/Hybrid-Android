@@ -13,8 +13,8 @@ object Logger {
 
     private const val TAG = "Hybrid"
 
-    fun d(msg: String) {
-        Log.d(TAG, msg)
+    fun d(msg: String?) {
+        Log.d(TAG, msg ?: "null")
     }
 
 }

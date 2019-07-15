@@ -7,5 +7,4 @@ package cn.quickits.hybrid.dto
  * @author: gavinliu
  * @create: 2019-07-12 14:41
  **/
-class Result {
-}
+data class Result(val value: Any?, val res_sn: String?)

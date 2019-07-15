@@ -3,8 +3,11 @@ package cn.quickits.hybrid
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.net.Uri
 import android.webkit.WebSettings
 import android.webkit.WebView
+import cn.quickits.hybrid.api.AbsApi
+import cn.quickits.hybrid.api.EnvApi
 import cn.quickits.hybrid.client.HybridWebChromeClient
 import cn.quickits.hybrid.client.HybridWebViewClient
 
@@ -17,24 +20,40 @@ import cn.quickits.hybrid.client.HybridWebViewClient
  **/
 class Hybrid(private val activity: Activity, private val webView: WebView) {
 
+    private val apiManager = ApiManager()
+
     /**
-     * 
+     *
+     */
+    fun handleUrl(url: Uri): Boolean = apiManager.handleUrl(url, webView)
+
+    /**
+     *
+     */
+    fun registerApi(api: AbsApi) = apiManager.registerApi(api)
+
+    /**
+     *
      */
     fun setupWebView() {
+        // 注册 API
+        registerApi(EnvApi())
+
+        // 配置 WebView
         setupWebClient(webView)
         setupWebSettings(webView.settings)
     }
 
     /**
-     *
+     * 设置 WebClient
      */
     private fun setupWebClient(webView: WebView) {
-        webView.webViewClient = HybridWebViewClient()
+        webView.webViewClient = HybridWebViewClient(hybrid = this)
         webView.webChromeClient = HybridWebChromeClient()
     }
 
     /**
-     *
+     * 设置 WebSettings
      */
     @SuppressLint("SetJavaScriptEnabled")
     private fun setupWebSettings(settings: WebSettings) {
