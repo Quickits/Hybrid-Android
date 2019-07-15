@@ -50,7 +50,7 @@ class Hybrid(private val activity: Activity, private val webView: WebView) {
      */
     private fun setupWebClient(webView: WebView) {
         webView.webViewClient = HybridWebViewClient(hybrid = this)
-        webView.webChromeClient = HybridWebChromeClient()
+        webView.webChromeClient = HybridWebChromeClient(activity = activity)
     }
 
     /**

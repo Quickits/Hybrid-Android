@@ -1,5 +1,6 @@
 package cn.quickits.hybrid.client
 
+import android.app.Activity
 import android.webkit.JsPromptResult
 import android.webkit.JsResult
 import android.webkit.WebChromeClient
@@ -12,7 +13,12 @@ import android.webkit.WebView
  * @author: gavinliu
  * @create: 2019-07-12 10:49
  **/
-class HybridWebChromeClient : WebChromeClient() {
+class HybridWebChromeClient(private val activity: Activity) : WebChromeClient() {
+
+    override fun onReceivedTitle(view: WebView?, title: String?) {
+        super.onReceivedTitle(view, title)
+        activity.title = title
+    }
 
     override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {
         return super.onJsAlert(view, url, message, result)

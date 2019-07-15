@@ -15,13 +15,15 @@ import kotlinx.android.synthetic.main.activity_hybrid.*
  * @author: gavinliu
  * @create: 2019-07-12 10:58
  **/
-class HybridActivity : AppCompatActivity() {
+open class HybridActivity : AppCompatActivity() {
 
     private lateinit var hybrid: Hybrid
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hybrid)
+        title = ""
+
         hybrid = Hybrid(this, web_view)
         hybrid.setupWebView()
 
