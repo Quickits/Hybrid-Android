@@ -64,7 +64,7 @@ abstract class AbsApi {
     }
 
     companion object {
-        private const val KEY_PARAMETER = "value"
+        private const val KEY_PARAMETER = "param"
         private const val KEY_REQUEST_SN = "req_sn"
     }
 
