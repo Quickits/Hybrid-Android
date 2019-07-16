@@ -18,6 +18,7 @@ class ApiManager {
     private val apiPool = ArrayMap<String, AbsApi>()
 
     fun handleUrl(url: Uri, webView: WebView): Boolean {
+        println("handleUrl: $url")
         return getApi(url)?.handleUrl(url, webView) ?: false
     }
 

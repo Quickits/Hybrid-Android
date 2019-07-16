@@ -1,12 +1,12 @@
 package cn.quickits.hybrid.api
 
+import android.app.Activity
 import android.net.Uri
 import android.util.ArrayMap
 import android.webkit.WebView
 import cn.quickits.hybrid.annotation.APIEndpoint
 import cn.quickits.hybrid.api.collection.Endpoint
 import cn.quickits.hybrid.dto.Result
-import cn.quickits.hybrid.util.Logger
 import com.google.gson.Gson
 
 
@@ -18,16 +18,14 @@ import com.google.gson.Gson
  **/
 abstract class AbsApi {
 
+    var activity: Activity? = null
+
     private val endpoints = ArrayMap<String, Endpoint>()
 
     fun handleUrl(url: Uri, webView: WebView): Boolean {
         val method = url.pathSegments[0]
         val param = url.getQueryParameter(KEY_PARAMETER)
         val reqSn = url.getQueryParameter(KEY_REQUEST_SN)
-
-        Logger.d(method)
-        Logger.d(param)
-        Logger.d(reqSn)
 
         val endpoint = getEndpoint(method)
 

@@ -68,8 +68,8 @@ class Hybrid(private val activity: AppCompatActivity, private val webView: WebVi
      */
     fun setupWebView() {
         // 注册 API
-        registerApi(EnvApi())
-        HybridConfig.customApi.forEach { registerApi(it) }
+        registerApi(EnvApi().also { it.activity = activity })
+        HybridConfig.customApi.forEach { registerApi(it.also { it.activity = activity }) }
 
         // 配置 WebView
         setupWebClient(webView)
