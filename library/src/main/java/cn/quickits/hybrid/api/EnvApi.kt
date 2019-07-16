@@ -1,7 +1,6 @@
 package cn.quickits.hybrid.api
 
 import cn.quickits.hybrid.annotation.APIEndpoint
-import cn.quickits.hybrid.annotation.APIParam
 import cn.quickits.hybrid.annotation.APIPath
 
 
@@ -17,11 +16,6 @@ class EnvApi : AbsApi() {
     @APIEndpoint
     fun getVersion(): String {
         return "V1.2.3"
-    }
-
-    @APIEndpoint
-    fun testParam(@APIParam("ss") ss: String, @APIParam("a") a: Int) {
-
     }
 
 }
