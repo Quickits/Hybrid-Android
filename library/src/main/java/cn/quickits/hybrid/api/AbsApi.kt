@@ -60,6 +60,8 @@ abstract class AbsApi {
             }
         }
 
+        endpoints[methodName] = endpoint
+
         return endpoint
     }
 
