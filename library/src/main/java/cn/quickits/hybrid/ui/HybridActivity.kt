@@ -27,6 +27,8 @@ open class HybridActivity : AppCompatActivity() {
         hybrid = Hybrid(this, web_view)
         hybrid.setupWebView()
 
+        lifecycle.addObserver(hybrid)
+
         intent?.getStringExtra(PARAM_PATH)?.let {
             web_view.loadUrl(it)
         }

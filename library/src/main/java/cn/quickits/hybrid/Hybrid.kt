@@ -1,15 +1,19 @@
 package cn.quickits.hybrid
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.webkit.WebSettings
 import android.webkit.WebView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.GenericLifecycleObserver
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import cn.quickits.hybrid.api.AbsApi
 import cn.quickits.hybrid.api.EnvApi
 import cn.quickits.hybrid.client.HybridWebChromeClient
 import cn.quickits.hybrid.client.HybridWebViewClient
+import cn.quickits.hybrid.util.Logger
 
 
 /**
@@ -18,9 +22,36 @@ import cn.quickits.hybrid.client.HybridWebViewClient
  * @author: gavinliu
  * @create: 2019-07-12 10:55
  **/
-class Hybrid(private val activity: Activity, private val webView: WebView) {
+@SuppressLint("RestrictedApi")
+class Hybrid(private val activity: AppCompatActivity, private val webView: WebView) : GenericLifecycleObserver {
 
     private val apiManager = ApiManager()
+
+    init {
+        activity.lifecycle.addObserver(this)
+    }
+
+    override fun onStateChanged(source: LifecycleOwner?, event: Lifecycle.Event?) {
+        Logger.d(event?.name)
+
+        when (event) {
+            Lifecycle.Event.ON_CREATE -> {
+
+            }
+
+            Lifecycle.Event.ON_DESTROY -> {
+                webView.setOnKeyListener(null)
+                webView.webViewClient = null
+                webView.webChromeClient = null
+                webView.removeAllViews()
+                webView.destroy()
+            }
+
+            else -> {
+
+            }
+        }
+    }
 
     /**
      *
