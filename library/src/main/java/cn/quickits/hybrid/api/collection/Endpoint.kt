@@ -46,7 +46,11 @@ class Endpoint(private val absApi: AbsApi, private val method: Method) {
     private fun castValueToType(jsonElement: JsonElement?, type: Class<*>?): Any? {
         if (jsonElement == null || jsonElement.toString() == "null") return null
 
-        return Gson().fromJson(jsonElement, type)
+        return when (type) {
+            Int::class.java -> jsonElement.asInt
+            else -> Gson().fromJson(jsonElement, String::class.java)
+
+        }
 
     }
 
