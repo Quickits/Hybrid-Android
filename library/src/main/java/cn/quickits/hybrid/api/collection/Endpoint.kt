@@ -48,8 +48,7 @@ class Endpoint(private val absApi: AbsApi, private val method: Method) {
 
         return when (type) {
             Int::class.java -> jsonElement.asInt
-            else -> jsonElement.toString()
-
+            else -> Gson().fromJson(jsonElement, JsonObject::class.java)
         }
 
     }
