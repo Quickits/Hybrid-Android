@@ -5,6 +5,7 @@ import cn.quickits.hybrid.api.AbsApi
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import java.lang.reflect.Method
 
 
@@ -36,7 +37,6 @@ class Endpoint(private val absApi: AbsApi, private val method: Method) {
                     }
                 }
             }
-
             method.invoke(absApi, *parameters)
         } else {
             method.invoke(absApi)
@@ -48,9 +48,32 @@ class Endpoint(private val absApi: AbsApi, private val method: Method) {
 
         return when (type) {
             Int::class.java -> jsonElement.asInt
-            else -> Gson().fromJson(jsonElement, JsonObject::class.java)
+            String::class.java -> {
+                if (validate(jsonElement.toString())){
+                    Gson().fromJson(jsonElement, JsonObject::class.java).toString()
+                }else{
+                    jsonElement.asString
+                }
+            }
+            else -> null
         }
 
+    }
+
+    private fun validate(jsonStr: String): Boolean {
+        val jsonElement: JsonElement
+        try {
+            jsonElement = JsonParser().parse(jsonStr)
+        } catch (e: Exception) {
+            return false
+        }
+        if (jsonElement == null) {
+            return false
+        }
+        if (!jsonElement.isJsonObject) {
+            return false
+        }
+        return true
     }
 
 }
