@@ -6,6 +6,7 @@ import android.net.Uri
 import android.webkit.WebSettings
 import android.webkit.WebView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.GenericLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -23,7 +24,7 @@ import cn.quickits.hybrid.util.Logger
  * @create: 2019-07-12 10:55
  **/
 @SuppressLint("RestrictedApi")
-class Hybrid(private val activity: AppCompatActivity, private val webView: WebView) : GenericLifecycleObserver {
+class Hybrid(private val activity: FragmentActivity, private val webView: WebView) : GenericLifecycleObserver {
 
     private val apiManager = ApiManager()
 
