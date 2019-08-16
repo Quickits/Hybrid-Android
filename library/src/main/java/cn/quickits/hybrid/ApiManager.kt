@@ -1,8 +1,10 @@
 package cn.quickits.hybrid
 
+import android.app.Activity
 import android.net.Uri
 import android.webkit.WebView
 import androidx.collection.ArrayMap
+import androidx.fragment.app.Fragment
 import cn.quickits.hybrid.annotation.APIPath
 import cn.quickits.hybrid.api.AbsApi
 
@@ -31,6 +33,20 @@ class ApiManager {
         }
     }
 
+    fun unRegister(activity: Activity){
+        apiPool.forEach { (_, absApi) ->
+            absApi.unRegisterActivity(activity)
+        }
+    }
+
+    fun unRegister(fragment: Fragment){
+        apiPool.forEach { (_, absApi) ->
+            absApi.unRegisterFragment(fragment)
+        }
+    }
+
     private fun getApi(url: Uri): AbsApi? = apiPool["${url.scheme}://${url.host}"]
+
+    private fun g(url: Uri): AbsApi? = apiPool["${url.scheme}://${url.host}"]
 
 }

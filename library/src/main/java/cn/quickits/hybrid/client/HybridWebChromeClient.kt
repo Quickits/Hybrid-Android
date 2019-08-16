@@ -5,6 +5,7 @@ import android.webkit.JsPromptResult
 import android.webkit.JsResult
 import android.webkit.WebChromeClient
 import android.webkit.WebView
+import androidx.fragment.app.Fragment
 
 
 /**
@@ -13,11 +14,12 @@ import android.webkit.WebView
  * @author: gavinliu
  * @create: 2019-07-12 10:49
  **/
-class HybridWebChromeClient(private val activity: Activity) : WebChromeClient() {
+class HybridWebChromeClient(private val activity: Activity?,private val fragment: Fragment?) : WebChromeClient() {
 
     override fun onReceivedTitle(view: WebView?, title: String?) {
         super.onReceivedTitle(view, title)
-        activity.title = title
+        activity?.title = title
+        fragment?.activity?.title=title
     }
 
     override fun onJsAlert(view: WebView?, url: String?, message: String?, result: JsResult?): Boolean {

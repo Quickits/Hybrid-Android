@@ -4,6 +4,7 @@ import android.app.Activity
 import android.net.Uri
 import android.util.ArrayMap
 import android.webkit.WebView
+import androidx.fragment.app.Fragment
 import cn.quickits.hybrid.annotation.APIEndpoint
 import cn.quickits.hybrid.api.collection.Endpoint
 import cn.quickits.hybrid.dto.Result
@@ -18,9 +19,39 @@ import com.google.gson.Gson
  **/
 abstract class AbsApi {
 
-    var activity: Activity? = null
+    var activities: MutableList<Activity> = mutableListOf()
+
+    var fragments: MutableList<Fragment> = mutableListOf()
 
     private val endpoints = ArrayMap<String, Endpoint>()
+
+    fun registerActivity(activity: Activity) {
+        if (activities.contains(activity)) {
+            return
+        }
+        activities.add(activity)
+    }
+
+    fun registerFragment(fragment: Fragment) {
+        if (fragments.contains(fragment)) {
+            return
+        }
+        fragments.add(fragment)
+    }
+
+    fun unRegisterActivity(activity: Activity) {
+        if (!activities.contains(activity)) {
+            return
+        }
+        activities.remove(activity)
+    }
+
+    fun unRegisterFragment(fragment: Fragment) {
+        if (!fragments.contains(fragment)) {
+            return
+        }
+        fragments.remove(fragment)
+    }
 
     fun handleUrl(url: Uri, webView: WebView): Boolean {
         val method = url.pathSegments[0]
@@ -30,13 +61,31 @@ abstract class AbsApi {
         val endpoint = getEndpoint(method)
 
         if (!reqSn.isNullOrEmpty()) {
-            val result = endpoint?.invoke(param)
-
-            webView.loadUrl("javascript:QuickitsHybrid.invoke('${Gson().toJson(Result(result, reqSn))}');")
+            val result = endpoint?.invoke(param, reqSn) ?: return true
+            webView.loadUrl(
+                "javascript:QuickitsHybrid.invoke('${Gson().toJson(
+                    Result(
+                        result,
+                        reqSn
+                    )
+                )}');"
+            )
         }
-
         return true
     }
+
+    fun callBackWithReqSn(result: Any, reqSn: String, webView: WebView): Boolean {
+        webView.loadUrl(
+            "javascript:QuickitsHybrid.invoke('${Gson().toJson(
+                Result(
+                    result,
+                    reqSn
+                )
+            )}');"
+        )
+        return true
+    }
+
 
     private fun getEndpoint(method: String): Endpoint? {
         return endpoints[method] ?: generateEndpoint(method)

@@ -1,6 +1,7 @@
 package cn.quickits.hybrid.api.collection
 
 import cn.quickits.hybrid.annotation.APIParam
+import cn.quickits.hybrid.annotation.ReqSnParam
 import cn.quickits.hybrid.api.AbsApi
 import com.google.gson.Gson
 import com.google.gson.JsonElement
@@ -18,7 +19,7 @@ import java.lang.reflect.Method
 class Endpoint(private val absApi: AbsApi, private val method: Method) {
 
 
-    fun invoke(param: String?): Any? {
+    fun invoke(param: String?, reqSn: String): Any? {
         val parameterAnnotations = method.parameterAnnotations
         val parameterTypes = method.parameterTypes
 
@@ -34,6 +35,9 @@ class Endpoint(private val absApi: AbsApi, private val method: Method) {
                     if (it is APIParam) {
                         val jsonElement = jsonObject.get(it.name)
                         parameters[index] = castValueToType(jsonElement, type)
+                    }
+                    if (it is ReqSnParam){
+                        parameters[index] = reqSn
                     }
                 }
             }
