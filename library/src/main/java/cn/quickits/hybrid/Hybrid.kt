@@ -32,8 +32,8 @@ class Hybrid(private val activity: FragmentActivity, private val webView: WebVie
         activity.lifecycle.addObserver(this)
     }
 
-    override fun onStateChanged(source: LifecycleOwner?, event: Lifecycle.Event?) {
-        Logger.d(event?.name)
+    override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+        Logger.d(event.name)
 
         when (event) {
             Lifecycle.Event.ON_CREATE -> {

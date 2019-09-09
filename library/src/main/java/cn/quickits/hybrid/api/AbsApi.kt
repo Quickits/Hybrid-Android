@@ -30,7 +30,7 @@ abstract class AbsApi {
         val endpoint = getEndpoint(method)
 
         if (!reqSn.isNullOrEmpty()) {
-            val result = endpoint?.invoke(param, reqSn)
+            val result = endpoint?.invoke(param, reqSn, webView.hashCode())
 
             webView.loadUrl(
                 "javascript:QuickitsHybrid.invoke('${Gson().toJson(
