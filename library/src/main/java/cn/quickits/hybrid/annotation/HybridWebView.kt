@@ -9,4 +9,4 @@ package cn.quickits.hybrid.annotation
  **/
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.VALUE_PARAMETER)
-annotation class WebViewHash
+annotation class HybridWebView

@@ -1,8 +1,9 @@
 package cn.quickits.hybrid.api.collection
 
+import android.webkit.WebView
 import cn.quickits.hybrid.annotation.APIParam
 import cn.quickits.hybrid.annotation.ReqSnParam
-import cn.quickits.hybrid.annotation.WebViewHash
+import cn.quickits.hybrid.annotation.HybridWebView
 import cn.quickits.hybrid.api.AbsApi
 import com.google.gson.Gson
 import com.google.gson.JsonElement
@@ -20,7 +21,7 @@ import java.lang.reflect.Method
 class Endpoint(private val absApi: AbsApi, private val method: Method) {
 
 
-    fun invoke(param: String?, reqSn: String, webViewHash: Int): Any? {
+    fun invoke(param: String?, reqSn: String, webview: WebView): Any? {
         val parameterAnnotations = method.parameterAnnotations
         val parameterTypes = method.parameterTypes
 
@@ -41,8 +42,8 @@ class Endpoint(private val absApi: AbsApi, private val method: Method) {
                         parameters[index] = reqSn
                     }
 
-                    if (it is WebViewHash) {
-                        parameters[index] = webViewHash
+                    if (it is HybridWebView) {
+                        parameters[index] = webview
                     }
                 }
             }
