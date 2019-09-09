@@ -30,8 +30,7 @@ abstract class AbsApi {
         val endpoint = getEndpoint(method)
 
         if (!reqSn.isNullOrEmpty()) {
-            val result = endpoint?.invoke(param, reqSn, webView)
-
+            val result = endpoint?.invoke(param, reqSn,webView) ?: return true
             webView.loadUrl(
                 "javascript:QuickitsHybrid.invoke('${Gson().toJson(
                     Result(
@@ -41,10 +40,20 @@ abstract class AbsApi {
                 )}');"
             )
         }
-
         return true
     }
 
+    fun callBackWithReqSn(result: Any, reqSn: String, webView: WebView): Boolean {
+        webView.loadUrl(
+            "javascript:QuickitsHybrid.invoke('${Gson().toJson(
+                Result(
+                    result,
+                    reqSn
+                )
+            )}');"
+        )
+        return true
+    }
     private fun getEndpoint(method: String): Endpoint? {
         return endpoints[method] ?: generateEndpoint(method)
     }
