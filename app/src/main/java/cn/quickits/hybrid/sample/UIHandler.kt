@@ -17,12 +17,14 @@ import com.hbbclub.storybook.mvvm.data.dto.Share
 @APIPath(path = "hbbrid://com.hbbclub.hybrid.UIHandler")
 class UIHandler : AbsApi() {
     @APIEndpoint
-    fun createTitleButton(@APIParam("btnLabel") btnLabel:String,
-                          @APIParam("action") action:String,
-                          @APIParam("data") data:String) {
-        if (activity !is HybridActivity){
+    fun createTitleButton(
+        @APIParam("btnLabel") btnLabel: String,
+        @APIParam("action") action: String,
+        @APIParam("data") data: String
+    ) {
+        if (activity !is HybridActivity) {
             return
         }
-        (activity as HybridActivity).addButton(btnLabel,action,data)
+        (activity as HybridActivity).addButton(btnLabel, action, data)
     }
 }

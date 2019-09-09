@@ -36,7 +36,7 @@ class Endpoint(private val absApi: AbsApi, private val method: Method) {
                         val jsonElement = jsonObject.get(it.name)
                         parameters[index] = castValueToType(jsonElement, type)
                     }
-                    if (it is ReqSnParam){
+                    if (it is ReqSnParam) {
                         parameters[index] = reqSn
                     }
                 }
@@ -53,9 +53,9 @@ class Endpoint(private val absApi: AbsApi, private val method: Method) {
         return when (type) {
             Int::class.java -> jsonElement.asInt
             String::class.java -> {
-                if (validate(jsonElement.toString())){
+                if (validate(jsonElement.toString())) {
                     Gson().fromJson(jsonElement, JsonObject::class.java).toString()
-                }else{
+                } else {
                     jsonElement.asString
                 }
             }

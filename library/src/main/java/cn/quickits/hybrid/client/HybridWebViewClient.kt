@@ -32,7 +32,11 @@ class HybridWebViewClient(val hybrid: Hybrid) : WebViewClient() {
         super.onPageFinished(view, url)
     }
 
-    override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+    override fun onReceivedError(
+        view: WebView?,
+        request: WebResourceRequest?,
+        error: WebResourceError?
+    ) {
         Logger.d("onReceivedError: ${request?.url} $error")
         super.onReceivedError(view, request, error)
     }

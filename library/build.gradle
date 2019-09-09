@@ -6,8 +6,8 @@ apply plugin: "kotlin-android-extensions"
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.0"
-    
+    buildToolsVersion "29.0.2"
+
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 29
@@ -29,12 +29,12 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    
-    implementation "androidx.appcompat:appcompat:1.0.2"
-    implementation "androidx.core:core-ktx:1.0.2"
+
+    implementation "androidx.appcompat:appcompat:1.1.0"
+    implementation "androidx.core:core-ktx:1.1.0"
 
     // https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-common
-    implementation "androidx.lifecycle:lifecycle-common:2.0.0"
+    implementation "androidx.lifecycle:lifecycle-common:2.1.0"
 
     implementation "com.google.code.gson:gson:2.8.5"
 

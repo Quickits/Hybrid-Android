@@ -1,13 +1,10 @@
 package cn.quickits.hybrid
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.webkit.WebSettings
 import android.webkit.WebView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.GenericLifecycleObserver
 import androidx.lifecycle.Lifecycle
@@ -26,29 +23,13 @@ import cn.quickits.hybrid.util.Logger
  * @create: 2019-07-12 10:55
  **/
 @SuppressLint("RestrictedApi")
-class Hybrid private constructor() : GenericLifecycleObserver {
-
-    private var activity: FragmentActivity? = null
-
-    private var fragment: Fragment? = null
-
-    private var webView: WebView? = null
-
-    constructor(activity: FragmentActivity, webView: WebView) : this() {
-        this.activity = activity
-        this.webView = webView
-    }
-
-    constructor(fragment: Fragment, webView: WebView) : this() {
-        this.fragment = fragment
-        this.webView = webView
-    }
+class Hybrid(private val activity: FragmentActivity, private val webView: WebView) :
+    GenericLifecycleObserver {
 
     private val apiManager = ApiManager()
 
     init {
-        activity?.lifecycle?.addObserver(this)
-        fragment?.lifecycle?.addObserver(this)
+        activity.lifecycle.addObserver(this)
     }
 
     override fun onStateChanged(source: LifecycleOwner?, event: Lifecycle.Event?) {
@@ -60,13 +41,11 @@ class Hybrid private constructor() : GenericLifecycleObserver {
             }
 
             Lifecycle.Event.ON_DESTROY -> {
-                webView?.run {
-                    setOnKeyListener(null)
-                    webViewClient = null
-                    webChromeClient = null
-                    removeAllViews()
-                    destroy()
-                }
+                webView.setOnKeyListener(null)
+                webView.webViewClient = null
+                webView.webChromeClient = null
+                webView.removeAllViews()
+                webView.destroy()
             }
 
             else -> {
@@ -78,61 +57,32 @@ class Hybrid private constructor() : GenericLifecycleObserver {
     /**
      *
      */
-    fun handleUrl(url: Uri): Boolean {
-        webView?.run {
-            return apiManager.handleUrl(url, this)
-        }
-        return false
-    }
+    fun handleUrl(url: Uri): Boolean = apiManager.handleUrl(url, webView)
 
     /**
      *
      */
     fun registerApi(api: AbsApi) = apiManager.registerApi(api)
 
-    fun unRegister(fragment: Fragment){
-        apiManager.unRegister(fragment)
-    }
-    fun unRegister(activity: Activity){
-        apiManager.unRegister(activity)
-    }
-
     /**
      *
      */
     fun setupWebView() {
         // 注册 API
-        registerApi(EnvApi().also {
-            activity?.run {
-                it.registerActivity(this)
-            }
-            fragment?.run {
-                it.registerFragment(this)
-            }
-        })
-        HybridConfig.customApi.forEach {
-            registerApi(it.also {
-                activity?.run { it.registerActivity(this) }
-                fragment?.run { it.registerFragment(this) }
-            })
-        }
+        registerApi(EnvApi().also { it.activity = activity })
+        HybridConfig.customApi.forEach { registerApi(it.also { it.activity = activity }) }
 
         // 配置 WebView
-        webView?.run {
-            setupWebClient(this)
-            setupWebSettings(this.settings)
-        }
-
+        setupWebClient(webView)
+        setupWebSettings(webView.settings)
     }
-
-
 
     /**
      * 设置 WebClient
      */
     private fun setupWebClient(webView: WebView) {
         webView.webViewClient = HybridWebViewClient(hybrid = this)
-        webView.webChromeClient = HybridWebChromeClient(activity, fragment)
+        webView.webChromeClient = HybridWebChromeClient(activity = activity)
     }
 
     /**
@@ -154,17 +104,7 @@ class Hybrid private constructor() : GenericLifecycleObserver {
         settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.SINGLE_COLUMN
 
         settings.setGeolocationEnabled(true)
-
-        val dir = when {
-            activity != null -> activity!!.getDir("geolocation", Context.MODE_PRIVATE).path
-            fragment != null -> fragment!!.requireActivity().getDir(
-                "geolocation",
-                Context.MODE_PRIVATE
-            ).path
-            else -> ""
-        }
-
-
+        val dir = activity.getDir("geolocation", Context.MODE_PRIVATE).path
         settings.setGeolocationDatabasePath(dir)
     }
 

@@ -15,6 +15,6 @@ import com.hbbclub.storybook.util.AccountInfoManager
 class AuthHandler : AbsApi() {
     @APIEndpoint
     fun getToken(): String {
-        return AccountInfoManager.get.mAccountInfo?.userToken?.token ?: ""
+        return AccountInfoManager.get.mAccountInfo.userToken.token ?: ""
     }
 }
