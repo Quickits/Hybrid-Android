@@ -7,5 +7,4 @@ package cn.quickits.hybrid.ui
  * @author: gavinliu
  * @create: 2019-07-15 19:58
  **/
-class HybridFragment {
-}
+class HybridFragment

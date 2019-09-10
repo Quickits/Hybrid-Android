@@ -1,10 +1,14 @@
 package cn.quickits.hybrid.api.collection
 
+import android.webkit.WebView
 import cn.quickits.hybrid.annotation.APIParam
+import cn.quickits.hybrid.annotation.ReqSnParam
+import cn.quickits.hybrid.annotation.HybridWebView
 import cn.quickits.hybrid.api.AbsApi
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import java.lang.reflect.Method
 
 
@@ -17,7 +21,7 @@ import java.lang.reflect.Method
 class Endpoint(private val absApi: AbsApi, private val method: Method) {
 
 
-    fun invoke(param: String?): Any? {
+    fun invoke(param: String?, reqSn: String, webview: WebView): Any? {
         val parameterAnnotations = method.parameterAnnotations
         val parameterTypes = method.parameterTypes
 
@@ -34,9 +38,15 @@ class Endpoint(private val absApi: AbsApi, private val method: Method) {
                         val jsonElement = jsonObject.get(it.name)
                         parameters[index] = castValueToType(jsonElement, type)
                     }
+                    if (it is ReqSnParam) {
+                        parameters[index] = reqSn
+                    }
+
+                    if (it is HybridWebView) {
+                        parameters[index] = webview
+                    }
                 }
             }
-
             method.invoke(absApi, *parameters)
         } else {
             method.invoke(absApi)
@@ -47,10 +57,33 @@ class Endpoint(private val absApi: AbsApi, private val method: Method) {
         if (jsonElement == null || jsonElement.toString() == "null") return null
 
         return when (type) {
-            String::class.java -> jsonElement.asString
             Int::class.java -> jsonElement.asInt
+            String::class.java -> {
+                if (validate(jsonElement.toString())) {
+                    Gson().fromJson(jsonElement, JsonObject::class.java).toString()
+                } else {
+                    jsonElement.asString
+                }
+            }
             else -> null
         }
+
+    }
+
+    private fun validate(jsonStr: String): Boolean {
+        val jsonElement: JsonElement
+        try {
+            jsonElement = JsonParser().parse(jsonStr)
+        } catch (e: Exception) {
+            return false
+        }
+        if (jsonElement == null) {
+            return false
+        }
+        if (!jsonElement.isJsonObject) {
+            return false
+        }
+        return true
     }
 
 }

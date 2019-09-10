@@ -5,7 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.webkit.WebSettings
 import android.webkit.WebView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.GenericLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -23,7 +23,8 @@ import cn.quickits.hybrid.util.Logger
  * @create: 2019-07-12 10:55
  **/
 @SuppressLint("RestrictedApi")
-class Hybrid(private val activity: AppCompatActivity, private val webView: WebView) : GenericLifecycleObserver {
+class Hybrid(private val activity: FragmentActivity, private val webView: WebView) :
+    GenericLifecycleObserver {
 
     private val apiManager = ApiManager()
 
@@ -31,8 +32,8 @@ class Hybrid(private val activity: AppCompatActivity, private val webView: WebVi
         activity.lifecycle.addObserver(this)
     }
 
-    override fun onStateChanged(source: LifecycleOwner?, event: Lifecycle.Event?) {
-        Logger.d(event?.name)
+    override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+        Logger.d(event.name)
 
         when (event) {
             Lifecycle.Event.ON_CREATE -> {
@@ -71,7 +72,7 @@ class Hybrid(private val activity: AppCompatActivity, private val webView: WebVi
         registerApi(EnvApi().also { it.activity = activity })
         HybridConfig.customApi.forEach { registerApi(it.also { it.activity = activity }) }
 
-        // 配置 WebView
+        // 配置 HybridWebView
         setupWebClient(webView)
         setupWebSettings(webView.settings)
     }

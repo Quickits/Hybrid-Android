@@ -15,7 +15,10 @@ class MainActivity : AppCompatActivity() {
         HybridConfig.addCustomApi(AuthHandler())
 
         btn.setOnClickListener {
-            HybridActivity.launch(this, "http://192.168.100.87:99/huodong/F81E0DFF8D0741C39F52C2A4295C7B0E")
+            HybridActivity.launch(
+                this,
+                "http://192.168.100.87:99/huodong/F81E0DFF8D0741C39F52C2A4295C7B0E"
+            )
 //            HybridActivity.launch(this, "http://192.168.100.115:3000")
         }
     }
